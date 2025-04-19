@@ -48,3 +48,5 @@ logs/
 
 # Ignore all legacy scripts
 scripts/legacy/
+.vercel
+.env*.local
