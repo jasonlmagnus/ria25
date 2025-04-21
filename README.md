@@ -149,4 +149,4 @@ For the assistant to work properly, ensure these files are present:
 
 ## Deployment Timestamp
 
-Last deployed: April 22, 2025
+Last deployed: April 22, 2025 (Updated for new feature deployment)
