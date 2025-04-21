@@ -146,3 +146,7 @@ For the assistant to work properly, ensure these files are present:
 - `scripts/data/2025/2025_global_data.csv`
 
 ## Features
+
+## Deployment Timestamp
+
+Last deployed: April 22, 2025
