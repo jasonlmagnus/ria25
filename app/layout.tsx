@@ -2,8 +2,10 @@ import React from "react";
 import "../styles/globals.css";
 import "../styles/bubbles.css";
 import "../styles/markdown.css";
+import "../styles/production-fix.css";
 import MainComponent from "../components/MainComponent";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 // const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -16,6 +18,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <Script src="/fix-markdown.js" strategy="afterInteractive" />
+      </head>
       <body>
         <MainComponent>{children}</MainComponent>
         <Analytics />

@@ -24,6 +24,7 @@ import remarkGfm from "remark-gfm";
 import PromptInput from "../../../components/PromptInput";
 // Helpers
 import { parseResponse } from "../../../utils/helpers";
+import { sanitizeOutput } from "../../../utils/shared/utils";
 import chatConfig from "../../../config/chat.config.json";
 import CollapsibleContent from "../../../components/CollapsibleContent";
 // Add the new AssistantSelector component
@@ -76,8 +77,11 @@ interface StreamingMarkdownProps {
 
 // Streaming-friendly markdown component
 function StreamingMarkdown({ content }: StreamingMarkdownProps) {
+  // Sanitize the content to remove citation markers
+  const sanitizedContent = sanitizeOutput(content);
+
   // Add a zero-width space and handle incomplete markup for better parsing
-  const safeContent = content ? content + "\u200B" : "";
+  const safeContent = sanitizedContent ? sanitizedContent + "\u200B" : "";
 
   // Fix common incomplete markdown that could cause render issues
   const fixedContent = React.useMemo(() => {
@@ -138,18 +142,82 @@ function StreamingMarkdown({ content }: StreamingMarkdownProps) {
               <table {...props} />
             </div>
           ),
-          // Ensure proper heading styles
-          h1: ({ node, ...props }) => (
-            <h1 {...props} className="font-bold text-primary" />
+          // Explicit heading styling to ensure SWC compatibility
+          h1: ({ node, children, ...props }) => (
+            <h1
+              {...props}
+              className="font-bold text-primary"
+              style={{
+                color: "var(--color-primary)",
+                fontWeight: 700,
+                fontSize: "1.5rem",
+                marginTop: "1.5rem",
+                marginBottom: "0.75rem",
+              }}
+            >
+              {children}
+            </h1>
           ),
-          h2: ({ node, ...props }) => (
-            <h2 {...props} className="font-bold text-primary" />
+          h2: ({ node, children, ...props }) => (
+            <h2
+              {...props}
+              className="font-bold text-primary"
+              style={{
+                color: "var(--color-primary)",
+                fontWeight: 700,
+                fontSize: "1.25rem",
+                marginTop: "1.25rem",
+                marginBottom: "0.625rem",
+              }}
+            >
+              {children}
+            </h2>
           ),
-          h3: ({ node, ...props }) => (
-            <h3 {...props} className="font-semibold text-primary" />
+          h3: ({ node, children, ...props }) => (
+            <h3
+              {...props}
+              className="font-semibold text-primary"
+              style={{
+                color: "var(--color-primary)",
+                fontWeight: 600,
+                fontSize: "1.125rem",
+                marginTop: "1rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {children}
+            </h3>
           ),
-          h4: ({ node, ...props }) => (
-            <h4 {...props} className="font-semibold text-primary" />
+          h4: ({ node, children, ...props }) => (
+            <h4
+              {...props}
+              className="font-semibold text-primary"
+              style={{
+                color: "var(--color-primary)",
+                fontWeight: 600,
+                fontSize: "1rem",
+                marginTop: "0.875rem",
+                marginBottom: "0.375rem",
+              }}
+            >
+              {children}
+            </h4>
+          ),
+          strong: ({ node, children, ...props }) => (
+            <strong
+              {...props}
+              style={{ fontWeight: 700, color: "var(--color-tertiary)" }}
+            >
+              {children}
+            </strong>
+          ),
+          p: ({ node, children, ...props }) => (
+            <p
+              {...props}
+              style={{ marginTop: "0.75rem", marginBottom: "0.75rem" }}
+            >
+              {children}
+            </p>
           ),
         }}
       >
@@ -781,7 +849,7 @@ ${
                 setStreamingMessage({
                   id: "streaming",
                   role: "assistant",
-                  content: accumulatedText.current,
+                  content: sanitizeOutput(accumulatedText.current),
                   createdAt: new Date(),
                 });
               }
@@ -822,7 +890,7 @@ ${
                 {
                   id: messageId.current.toString(),
                   role: "assistant",
-                  content: finalContent,
+                  content: sanitizeOutput(finalContent),
                   createdAt: new Date(eventData.createdAt || Date.now()),
                 },
               ]);

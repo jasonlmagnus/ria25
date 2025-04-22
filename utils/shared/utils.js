@@ -8,8 +8,20 @@
  * @returns {string} - The sanitized text
  */
 export function sanitizeOutput(text) {
-  // Remove [[n](#source)] style citations to avoid collapsing whitespace
-  return String(text || "").replace(/\[\[(\d+)\]\(#.*?\)\]/g, "");
+  if (!text) return "";
+
+  let sanitized = String(text);
+
+  // Remove [[n](#source)] style citations
+  sanitized = sanitized.replace(/\[\[(\d+)\]\(#.*?\)\]/g, "");
+
+  // Remove 【n:Q#†source】style citations (newer format)
+  sanitized = sanitized.replace(/【[^】]*?source】/g, "");
+
+  // Remove any other common citation patterns with daggers
+  sanitized = sanitized.replace(/\[(\d+:)?[^[\]]*?†[^[\]]*?\]/g, "");
+
+  return sanitized;
 }
 
 /**

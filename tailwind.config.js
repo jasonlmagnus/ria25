@@ -9,6 +9,34 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./styles/**/*.css",
   ],
+  safelist: [
+    // Message bubbles
+    "message-bubble",
+    "message-bubble-assistant",
+    "message-bubble-user",
+    "message-content",
+    // Chat UI elements
+    "loading-message",
+    "chat-container",
+    "chat-messages",
+    "hero-section",
+    // Typography and markdown
+    "prose",
+    "max-w-none",
+    // Interactive elements
+    "collapsible",
+    "collapsed",
+    "expanded",
+    // Basic utility classes
+    "bg-white",
+    "bg-gray-50",
+    "text-primary",
+    "text-secondary",
+    "font-bold",
+    "font-semibold",
+    "overflow-x-auto",
+    "whitespace-pre-wrap",
+  ],
   theme: {
     screens: {
       xs: "480px",
